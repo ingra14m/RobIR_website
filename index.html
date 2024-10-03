@@ -1,0 +1,697 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="description"
+          content="RobIR: Robust Inverse Rendering for High-Illumination Scenes">
+    <meta name="keywords" content="Inverse Rendering, BRDF Estimation, Shadow Removal">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>RobIR: Robust Inverse Rendering for High-Illumination Scenes</title>
+
+    <!-- Bootstrap -->
+    <link rel="stylesheet" href="./static/css/bootstrap-4.4.1.css">
+
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-PYVRSFMDRL"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+
+        function gtag() {
+            dataLayer.push(arguments);
+        }
+
+        gtag('js', new Date());
+
+        gtag('config', 'G-PYVRSFMDRL');
+    </script>
+
+    <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro|Jost"
+          rel="stylesheet">
+
+
+    <link rel="stylesheet" href="./static/css/bulma.min.css">
+    <link rel="stylesheet" href="./static/css/bulma-carousel.min.css">
+    <link rel="stylesheet" href="./static/css/bulma-slider.min.css">
+    <link rel="stylesheet" href="./static/css/fontawesome.all.min.css">
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
+    <link rel="stylesheet" href="./static/css/index.css">
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script defer src="./static/js/fontawesome.all.min.js"></script>
+    <script src="./static/js/bulma-carousel.min.js"></script>
+    <script src="./static/js/bulma-slider.min.js"></script>
+    <script src="./static/js/index.js"></script>
+
+    <link rel="stylesheet" href="./static/css/dics.original.css">
+    <script src="./static/js/event_handler.js"></script>
+    <script src="./static/js/dics.original.js"></script>
+</head>
+<body>
+
+<nav class="navbar" role="navigation" aria-label="main navigation">
+    <div class="navbar-brand">
+        <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false">
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+        </a>
+    </div>
+    <div class="navbar-menu">
+        <div class="navbar-start" style="flex-grow: 1; justify-content: center;">
+            <a class="navbar-item" href="https://ingra14m.github.io/RobIR_website/">
+      <span class="icon">
+          <i class="fas fa-home"></i>
+      </span>
+            </a>
+
+            <div class="navbar-item has-dropdown is-hoverable">
+                <a class="navbar-link">
+                    Related Research
+                </a>
+                <div class="navbar-dropdown">
+                    <a class="navbar-item" href="https://kai-46.github.io/PhySG-website/" target="_blank">
+                        PhySG
+                    </a>
+                    <a class="navbar-item" href="https://zju3dv.github.io/invrender/"
+                       target="_blank">
+                        InvRender
+                    </a>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</nav>
+
+
+<section class="hero">
+    <div class="hero-body">
+        <div class="container is-max-desktop">
+            <div class="columns is-centered">
+                <div class="column has-text-centered">
+                    <!--                    <h1 class="title is-1 publication-title" style="margin-bottom: 0"><span>Seamless-Gaussian:</span>-->
+                    <!--                    </h1>-->
+                    <h1 class="title is-2 publication-title" style="margin-top: 0; margin-bottom: 0">RobIR: Robust
+                        Inverse Rendering for <br> High-Illumination Scenes</h1>
+
+                    <h3 style="color:#5a6268;" class="title is-3">NeurIPS 2024 </h3>
+
+                    <div class="is-size-5 publication-authors">
+                        <span class="author-block">
+                          <a href="https://ingra14m.github.io/" target="_blank">Ziyi Yang</a><sup>1</sup></span>&nbsp;&nbsp;&nbsp;&nbsp;
+                        <span class="author-block">
+                          <a href="https://github.com/Choconuts" target="_blank">Yanzhen Chen</a><sup>1</sup></span>&nbsp;&nbsp;&nbsp;&nbsp;
+                        <span class="author-block">
+                          <a href="https://github.com/gs-learner" target="_blank">Xinyu Gao</a><sup>1</sup></span>&nbsp;&nbsp;&nbsp;&nbsp;
+                        <span class="author-block">
+                          <a href="https://yuanyazhen.github.io/" target="_blank">Yazhen Yuan</a><sup>2</sup></span>&nbsp;&nbsp;&nbsp;&nbsp;
+                        <br>
+                        <span class="author-block">
+                          <a>Yu Wu</a><sup>2</sup></span>&nbsp;&nbsp;&nbsp;&nbsp;
+                        <span class="author-block">
+                          <a href="https://www.xzhou.me/" target="_blank">Xiaowei Zhou</a><sup>1</sup></span>&nbsp;&nbsp;&nbsp;&nbsp;
+                        <span class="author-block">
+                          <a href="http://www.cad.zju.edu.cn/home/jin/"
+                             target="_blank">Xiaogang Jin</a><sup>1&Dagger;</sup>
+                        </span>
+                    </div>
+
+                    <div class="is-size-5 publication-authors">
+                        <span class="author-block"><sup>1</sup>Zhejiang University</span>&nbsp;&nbsp;&nbsp;&nbsp;
+                        <span class="author-block"><sup>2</sup>Tencent</span>&nbsp;&nbsp;&nbsp;&nbsp;
+                    </div>
+
+                    <div class="column has-text-centered">
+                        <div class="publication-links">
+                            <!-- PDF Link. -->
+                            <span class="link-block">
+                                <a href="files/RobIR_main_paper.pdf"
+                                   class="external-link button is-normal is-rounded is-dark">
+                                  <span class="icon">
+                                      <i class="fas fa-file-pdf"></i>
+                                  </span>
+                                  <span>Paper</span>
+                                </a>
+                            </span>
+
+                            <!-- Supple Link. -->
+                            <span class="link-block">
+                                <a href="files/RobIR_supple.pdf"
+                                   class="external-link button is-normal is-rounded is-dark">
+                                  <span class="icon">
+                                      <i class="fas fa-file-pdf"></i>
+                                  </span>
+                                  <span>Supple</span>
+                                </a>
+                            </span>
+
+                            <!-- Arxiv Link. -->
+                            <span class="link-block">
+                                <a href="https://arxiv.org/abs/2310.13030"
+                                   class="external-link button is-normal is-rounded is-dark">
+                                  <span class="icon">
+                                      <i class="ai ai-arxiv"></i>
+                                  </span>
+                                  <span>Arxiv</span>
+                                </a>
+                            </span>
+
+                            <!-- Code Link. -->
+                            <span class="link-block">
+                                <a href="https://github.com/ingra14m/RobIR"
+                                   class="external-link button is-normal is-rounded is-dark disabled">
+                                  <span class="icon">
+                                      <i class="fab fa-github"></i>
+                                  </span>
+                                  <span>Code</span>
+                                </a>
+                            </span>
+
+                            <!-- Data Link. -->
+                            <span class="link-block">
+                                <a href="https://drive.google.com/drive/folders/1maQVCc7xTxv9NYmWxLFT3bu0M9J4XhK0?usp=sharing"
+                                   class="external-link button is-normal is-rounded is-dark is-dark">
+                                  <span class="icon">
+                                      <i class="far fa-images"></i>
+                                  </span>
+                                  <span>Data</span>
+                                </a>
+                            </span>
+
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<div class="columns is-centered has-text-centered">
+    <div class="container is-max-desktop">
+        <h2 class="title is-3">Optimization Speed</h2>
+        <div class="publication-video">
+            <iframe src="files/Optimization-Speed-Comparison.mp4"
+                    frameborder="0" allow="autoplay; encrypted-media"></iframe>
+        </div>
+    </div>
+</div>
+
+<section class="hero is-light is-small">
+    <div class="hero-body">
+
+        <div class="container is-max-desktop">
+            <div class="content has-text-justified">
+                <h3 class="title is-3 is-centered has-text-centered">Video Demo on Cases in 3D-Gaussian-Stitching</h3>
+            </div>
+
+            <div id="results-carousel" class="carousel results-carousel">
+                <div class="item item-fullbody">
+                    <video poster="" id="fullbody" autoplay controls muted loop playsinline height="100%">
+                        <source src="videos/gxy_6_comparison.mp4"
+                                type="video/mp4">
+                    </video>
+                </div>
+                <div class="item item-fullbody">
+                    <video poster="" id="fullbody" autoplay controls muted loop playsinline height="100%">
+                        <source src="videos/gxy_7_comparison.mp4"
+                                type="video/mp4">
+                    </video>
+                </div>
+                <div class="item item-fullbody">
+                    <video poster="" id="fullbody" autoplay controls muted loop playsinline height="100%">
+                        <source src="videos/gxy_10_comparison.mp4"
+                                type="video/mp4">
+                    </video>
+                </div>
+                <div class="item item-fullbody">
+                    <video poster="" id="fullbody" autoplay controls muted loop playsinline height="100%">
+                        <source src="videos/gxy_1_comparison.mp4"
+                                type="video/mp4">
+                    </video>
+                </div>
+                <div class="item item-fullbody">
+                    <video poster="" id="fullbody" autoplay controls muted loop playsinline height="100%">
+                        <source src="videos/gxy_2_comparison.mp4"
+                                type="video/mp4">
+                    </video>
+                </div>
+                <div class="item item-fullbody">
+                    <video poster="" id="fullbody" autoplay controls muted loop playsinline height="100%">
+                        <source src="videos/gxy_3_comparison.mp4"
+                                type="video/mp4">
+                    </video>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="hero is-light is-small">
+    <div class="hero-body">
+        <div class="container is-max-desktop">
+            <div class="content has-text-justified">
+                <h3 class="title is-3 is-centered has-text-centered">Visual Comparison on Cases in
+                    3D-Gaussian-Stitching</h3>
+            </div>
+            <div class="content has-text-justified">
+                <p>
+
+                </p>
+            </div>
+            <div class="columns is-centered">
+                <!-- Visual Effects. -->
+                <div class="column">
+                    <div class="content">
+                        <div class="columns is-centered">
+                            <div class="column is-full-width">
+                                <div id="example5" class="bal-container-mip360">
+
+                                    <div class="bal-after">
+                                        <img src="imgs/gs_stitching/gxy_5_038.png">
+                                        <div class="bal-afterPosition afterLabel">
+                                            Ours
+                                        </div>
+                                    </div>
+
+                                    <div class="bal-before">
+                                        <div class="bal-before-inset">
+                                            <img src="imgs/seamless-nerf/gxy_5_038.png">
+                                            <div class="bal-beforePosition beforeLabel">
+                                                Seamless-NeRF
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="bal-handle">
+                                        <span class=" handle-left-arrow"></span>
+                                        <span class="handle-right-arrow"></span>
+                                    </div>
+
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="column">
+                    <div class="columns is-centered">
+                        <div class="column content">
+
+                            <div id="example3" class="bal-container-mip360">
+                                <div class="bal-after">
+                                    <img src="imgs/gs_stitching/gxy_12_068.png">
+                                    <div class="bal-afterPosition afterLabel">
+                                        Ours
+                                    </div>
+                                </div>
+
+                                <div class="bal-before">
+                                    <div class="bal-before-inset">
+                                        <img src="imgs/seamless-nerf/gxy_12_068.png">
+                                        <div class="bal-beforePosition beforeLabel">
+                                            Seamless-NeRF
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="bal-handle">
+                                    <span class=" handle-left-arrow"></span>
+                                    <span class="handle-right-arrow"></span>
+                                </div>
+
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+                <div class="column">
+                    <div class="columns is-centered">
+                        <div class="column content">
+
+                            <div id="example6" class="bal-container-mip360">
+                                <div class="bal-after">
+                                    <img src="imgs/gs_stitching/gxy_9_062.png">
+                                    <div class="bal-afterPosition afterLabel">
+                                        Ours
+                                    </div>
+                                </div>
+
+                                <div class="bal-before">
+                                    <div class="bal-before-inset">
+                                        <img src="imgs/seamless-nerf/gxy_9_062.png">
+                                        <div class="bal-beforePosition beforeLabel">
+                                            Seamless-NeRF
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="bal-handle">
+                                    <span class=" handle-left-arrow"></span>
+                                    <span class="handle-right-arrow"></span>
+                                </div>
+
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</section>
+
+
+<section class="hero is-light is-small">
+    <div class="hero-body">
+        <div class="container is-max-desktop">
+            <div class="content has-text-justified">
+                <h3 class="title is-3 is-centered has-text-centered">Video Demo on Cases in Seamless-NeRF</h3>
+            </div>
+
+            <div id="results-carousel" class="carousel results-carousel">
+                <div class="item item-fullbody">
+                    <video poster="" id="fullbody" autoplay controls muted loop playsinline height="100%">
+                        <source src="videos/gbc_1_comparison.mp4"
+                                type="video/mp4">
+                    </video>
+                </div>
+                <div class="item item-fullbody">
+                    <video poster="" id="fullbody" autoplay controls muted loop playsinline height="100%">
+                        <source src="videos/gbc_4_comparison.mp4"
+                                type="video/mp4">
+                    </video>
+                </div>
+                <div class="item item-fullbody">
+                    <video poster="" id="fullbody" autoplay controls muted loop playsinline height="100%">
+                        <source src="videos/gbc_5_comparison.mp4"
+                                type="video/mp4">
+                    </video>
+                </div>
+                <div class="item item-fullbody">
+                    <video poster="" id="fullbody" autoplay controls muted loop playsinline height="100%">
+                        <source src="videos/gbc_6_comparison.mp4"
+                                type="video/mp4">
+                    </video>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+<section class="hero is-light is-small">
+    <div class="hero-body">
+        <div class="container">
+            <div class="content has-text-justified">
+                <h3 class="title is-3 is-centered has-text-centered">Visual Comparison on Cases in Seamless-NeRF</h3>
+            </div>
+            <div class="content has-text-justified">
+                <p>
+
+                </p>
+            </div>
+            <div class="columns is-centered">
+                <!-- Visual Effects. -->
+                <div class="column">
+                    <div class="content">
+                        <div class="columns is-centered">
+                            <div class="column is-full-width">
+                                <div id="example1" class="bal-container-small">
+
+                                    <div class="bal-after">
+                                        <img src="imgs/gs_stitching/gbc_3_48.png">
+                                        <div class="bal-afterPosition afterLabel">
+                                            Ours
+                                        </div>
+                                    </div>
+
+                                    <div class="bal-before">
+                                        <div class="bal-before-inset">
+                                            <img src="imgs/seamless-nerf/gbc_3_48.png">
+                                            <div class="bal-beforePosition beforeLabel">
+                                                Seamless-NeRF
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="bal-handle">
+                                        <span class=" handle-left-arrow"></span>
+                                        <span class="handle-right-arrow"></span>
+                                    </div>
+
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!--/ Visual Effects. -->
+
+                <!-- Matting. -->
+                <div class="column">
+                    <div class="columns is-centered">
+                        <div class="column content">
+
+                            <div id="example2" class="bal-container-small">
+                                <div class="bal-after">
+                                    <img src="imgs/gs_stitching/gbc_7_227.png">
+                                    <div class="bal-afterPosition afterLabel">
+                                        Ours
+                                    </div>
+                                </div>
+
+                                <div class="bal-before">
+                                    <div class="bal-before-inset">
+                                        <img src="imgs/seamless-nerf/gbc_7_227.png">
+                                        <div class="bal-beforePosition beforeLabel">
+                                            Seamless-NeRF
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="bal-handle">
+                                    <span class=" handle-left-arrow"></span>
+                                    <span class="handle-right-arrow"></span>
+                                </div>
+
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+                <div class="column">
+                    <div class="columns is-centered">
+                        <div class="column content">
+
+                            <div id="example4" class="bal-container-small">
+                                <div class="bal-after">
+                                    <img src="imgs/gs_stitching/gbc_2_261.png">
+                                    <div class="bal-afterPosition afterLabel">
+                                        Ours
+                                    </div>
+                                </div>
+
+                                <div class="bal-before">
+                                    <div class="bal-before-inset">
+                                        <img src="imgs/seamless-nerf/gbc_2_261.png">
+                                        <div class="bal-beforePosition beforeLabel">
+                                            Seamless-NeRF
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="bal-handle">
+                                    <span class=" handle-left-arrow"></span>
+                                    <span class="handle-right-arrow"></span>
+                                </div>
+
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+<section class="section">
+    <div class="container is-max-desktop">
+        <div class="content has-text-justified">
+            <h2 class="title is-3 is-centered has-text-centered">Segmentation in GUI</h2>
+            <div class="publication-video">
+                <iframe src="files/Segmentation-GUI.mp4"
+                        frameborder="0" allow="autoplay; encrypted-media"></iframe>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="section">
+    <div class="container is-max-desktop">
+        <div class="content has-text-justified">
+            <h2 class="title is-3 is-centered has-text-centered">Demo of Stitching in GUI</h2>
+            <div class="publication-video">
+                <iframe src="files/Stitching-demo.mp4"
+                        frameborder="0" allow="autoplay; encrypted-media"></iframe>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="section">
+    <div class="container is-max-desktop">
+        <div class="content has-text-justified">
+            <h2 class="title is-3 is-centered has-text-centered">Pipeline of 3D Gaussian Stitching</h2>
+            <div class="has-text-centered">
+                <img style="width: 90%;" src="files/pipeline.png"
+                     alt="HyperNeRF architecture."/>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="section">
+    <div class="container is-max-desktop">
+        <!-- Abstract. -->
+        <div class="columns is-centered has-text-centered">
+            <div class="column is-four-fifths">
+                <h2 class="title is-3">Abstract</h2>
+                <div class="content has-text-justified">
+                    <p>
+                        Using parts of existing models to rebuild new models, commonly termed as example-based modeling,
+                        is a classical methodology in the realm of computer graphics. Previous works mostly focus on
+                        shape composition, making them very hard to use for realistic composition of 3D objects captured
+                        from real-world scenes. This leads to combining multiple NeRFs into a single 3D scene to achieve
+                        seamless appearance blending.
+                        However, the current SeamlessNeRF method struggles to achieve interactive editing and harmonious
+                        stitching for real-world scenes due to its gradient-based strategy and grid-based
+                        representation.
+                        To this end, we present an example-based modeling method that combines multiple Gaussian fields
+                        in a point-based representation using sample-guided synthesis.
+                        Specifically, as for composition, we create a GUI to segment and transform multiple fields in
+                        real time, easily obtaining a semantically meaningful composition of models represented by 3D
+                        Gaussian Splatting (3DGS). For texture blending, due to the discrete and irregular nature of
+                        3DGS, straightforwardly applying gradient propagation as SeamlssNeRF is not supported. Thus, a
+                        novel sampling-based cloning method is proposed to harmonize the blending while preserving the
+                        original rich texture and content. Our workflow consists of three steps: 1) real-time
+                        segmentation and transformation of a Gaussian model using a well-tailored GUI, 2) KNN analysis
+                        to identify boundary points in the intersecting area between the source and target models, and
+                        3) two-phase optimization of the target model using sampling-based cloning and gradient
+                        constraints. Extensive experimental results validate that our approach significantly outperforms
+                        previous works in terms of realistic synthesis, demonstrating its practicality.
+                    </p>
+                </div>
+            </div>
+        </div>
+        <!--/ Abstract. -->
+
+    </div>
+</section>
+
+
+<!--<section class="section" id="Acknowledgements">-->
+<!--    <div class="container is-max-desktop content">-->
+<!--        <h2 class="title">Acknowledgements</h2>-->
+<!--        ZY, AC and AG are supported by the ERC Starting Grant LEGO-3D (850533) and DFG EXC number 2064/1 - project-->
+<!--        number 390727645.-->
+<!--        TS is supported by a Czech Science Foundation (GACR) EXPRO grant (UNI-3D, grant no. 23-07973X).-->
+<!--        We also thank Christian Reiser for insightful discussions during the preparation of the draft.-->
+<!--    </div>-->
+<!--</section>-->
+
+<section class="section" id="BibTeX">
+    <div class="container is-max-desktop content">
+        <h2 class="title">BibTeX</h2>
+        <pre><code>@article{gao2024stitching,
+  title={Towards Realistic Example-based Modeling via 3D Gaussian Stitching},
+  author={Gao, Xinyu and Yang, Ziyi and Gong, Bingchen and Han, Xiaoguang and Yang, Sipeng and Jin, Xiaogang},
+  journal={arXiv preprint arXiv:2408.15708},
+  year={2024}
+}</code></pre>
+    </div>
+</section>
+
+
+<footer class="footer is-center">
+    <div class="container">
+        <div class="content has-text-centered">
+        </div>
+        <div class="columns is-centered">
+            <div class="column is-8">
+                <div class="content">
+                    <p>
+                        This website is licensed under a <a rel="license"
+                                                            href="http://creativecommons.org/licenses/by-sa/4.0/">Creative
+                        Commons Attribution-ShareAlike 4.0 International License</a>.
+                        This webpage template is from <a href="https://github.com/nerfies/nerfies.github.io">Nerfies</a>.
+                        We sincerely thank <a href="https://keunhong.com/">Keunhong Park</a> for developing and
+                        open-sourcing this template.
+                        The video comparison with sliding bar is from <a href="https://dorverbin.github.io/refnerf/">Ref-NeRF</a>.
+                        The image comparison with sliding bar is from <a
+                            href="https://research.nvidia.com/labs/dir/neuralangelo/">Neuralangelo</a>.
+                    </p>
+                </div>
+            </div>
+            <p></p>
+        </div>
+    </div>
+</footer>
+
+
+<script src="static/js/script.js"></script>
+
+<script>
+    new BeforeAfter({
+        id: '#example1'
+    });
+    new BeforeAfter({
+        id: '#example2'
+    });
+    new BeforeAfter({
+        id: '#example4'
+    });
+    new BeforeAfter({
+        id: '#example5'
+    });
+
+    new BeforeAfter({
+        id: '#example3'
+    })
+
+    new BeforeAfter({
+        id: '#example6'
+    })
+
+    // new BeforeAfter({
+    //     id: '#example6'
+    // })
+    //
+    // new BeforeAfter({
+    //     id: '#garden'
+    // })
+
+    new BeforeAfter({
+        id: '#teapot'
+    })
+
+    new BeforeAfter({
+        id: '#plane12'
+    })
+
+    new BeforeAfter({
+        id: '#jupyter'
+    })
+
+</script>
+
+</body>
+</html>
