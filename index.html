@@ -550,7 +550,7 @@
 <section class="section">
     <div class="container is-max-desktop">
         <div class="content has-text-justified">
-            <h2 class="title is-3 is-centered has-text-centered">Pipeline of 3D Gaussian Stitching</h2>
+            <h2 class="title is-3 is-centered has-text-centered">Pipeline of RobIR</h2>
             <div class="has-text-centered">
                 <img style="width: 90%;" src="files/pipeline.png"
                      alt="HyperNeRF architecture."/>
@@ -567,27 +567,18 @@
                 <h2 class="title is-3">Abstract</h2>
                 <div class="content has-text-justified">
                     <p>
-                        Using parts of existing models to rebuild new models, commonly termed as example-based modeling,
-                        is a classical methodology in the realm of computer graphics. Previous works mostly focus on
-                        shape composition, making them very hard to use for realistic composition of 3D objects captured
-                        from real-world scenes. This leads to combining multiple NeRFs into a single 3D scene to achieve
-                        seamless appearance blending.
-                        However, the current SeamlessNeRF method struggles to achieve interactive editing and harmonious
-                        stitching for real-world scenes due to its gradient-based strategy and grid-based
-                        representation.
-                        To this end, we present an example-based modeling method that combines multiple Gaussian fields
-                        in a point-based representation using sample-guided synthesis.
-                        Specifically, as for composition, we create a GUI to segment and transform multiple fields in
-                        real time, easily obtaining a semantically meaningful composition of models represented by 3D
-                        Gaussian Splatting (3DGS). For texture blending, due to the discrete and irregular nature of
-                        3DGS, straightforwardly applying gradient propagation as SeamlssNeRF is not supported. Thus, a
-                        novel sampling-based cloning method is proposed to harmonize the blending while preserving the
-                        original rich texture and content. Our workflow consists of three steps: 1) real-time
-                        segmentation and transformation of a Gaussian model using a well-tailored GUI, 2) KNN analysis
-                        to identify boundary points in the intersecting area between the source and target models, and
-                        3) two-phase optimization of the target model using sampling-based cloning and gradient
-                        constraints. Extensive experimental results validate that our approach significantly outperforms
-                        previous works in terms of realistic synthesis, demonstrating its practicality.
+                        Implicit representation has opened up new possibilities for inverse rendering. However, existing
+                        implicit neural inverse rendering methods struggle to handle strongly illuminated scenes with
+                        significant shadows and slight reflections. The existence of shadows and reflections can lead to
+                        an inaccurate understanding of the scene, making precise factorization difficult.
+                        To this end, we present RobIR, an implicit inverse rendering approach that uses ACES tone
+                        mapping and regularized visibility estimation to reconstruct accurate BRDF of the object.
+                        By accurately modeling the indirect radiance field, normal, visibility, and direct light
+                        simultaneously, we are able to accurately decouple environment lighting and the object's PBR
+                        materials without imposing strict constraints on the scene. Even in high-illumination scenes
+                        with shadows and specular reflections, our method can recover high-quality albedo and roughness
+                        with no shadow interference.
+                        RobIR outperforms existing methods in both quantitative and qualitative evaluations.
                     </p>
                 </div>
             </div>
@@ -611,11 +602,11 @@
 <section class="section" id="BibTeX">
     <div class="container is-max-desktop content">
         <h2 class="title">BibTeX</h2>
-        <pre><code>@article{gao2024stitching,
-  title={Towards Realistic Example-based Modeling via 3D Gaussian Stitching},
-  author={Gao, Xinyu and Yang, Ziyi and Gong, Bingchen and Han, Xiaoguang and Yang, Sipeng and Jin, Xiaogang},
-  journal={arXiv preprint arXiv:2408.15708},
-  year={2024}
+        <pre><code>@article{yang2023sire,
+  title={Sire-ir: Inverse rendering for brdf reconstruction with shadow and illumination removal in high-illuminance scenes},
+  author={Yang, Ziyi and Chen, Yanzhen and Gao, Xinyu and Yuan, Yazhen and Wu, Yu and Zhou, Xiaowei and Jin, Xiaogang},
+  journal={arXiv preprint arXiv:2310.13030},
+  year={2023}
 }</code></pre>
     </div>
 </section>
